@@ -7,6 +7,7 @@ Welcome to the official GitHub repository for **"Mastering Web Scraping with Scr
 ## 📖 About the Book
 
 **"Mastering Web Scraping with Scrapy"** is an in-depth guide authored by **Pedo Martins**, a seasoned Solution Architect and the creator of [Cantinhode.net](https://cantinhode.net) and Code Academy. The book covers everything from the fundamentals of web scraping to advanced techniques, including the integration of Artificial Intelligence (AI) and OpenAI's GPT-4 for intelligent data extraction and processing.
+![alt text](<Mastering Web Scraping with Scrapy.jpg>)
 
 ### **What You'll Learn**
 
