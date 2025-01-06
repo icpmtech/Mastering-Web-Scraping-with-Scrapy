@@ -1,0 +1,60 @@
+import scrapy
+
+
+class MostActiveStocksHTMLSpider(scrapy.Spider):
+    name = "most_active_stocks_html"
+    allowed_domains = ["live.euronext.com"]
+    start_urls = [
+        "https://live.euronext.com/en/ajax/getTopPerformersPopup/MostActive?a=true&belongs_to=ENXL,ALXL,XLIS&is_factory=true&tp_type=STOCK&tp_subtype=0101"
+    ]
+
+
+    def parse(self, response):
+        # Locate the table
+        table = response.xpath("//table[@id='AwlTopPerformersPopupTable']")
+
+        # Extract column headers
+        headers = table.xpath(".//thead/tr/th/text()").getall()
+        headers = [header.strip() for header in headers if header.strip()]  # Clean and remove empty headers
+
+        # Extract rows from tbody
+        rows = table.xpath(".//tbody/tr")
+
+        for row in rows:
+            # Extract each cell's text and align with headers
+            cells = row.xpath("./td")
+            data = {}
+            for index, cell in enumerate(cells):
+                # Ensure no index out of range for headers
+                if index < len(headers):
+                    column_name = headers[index]
+                    cell_text = cell.xpath(".//text()").get(default="").strip()
+                    cell_data = cell.attrib.get("data-order", cell_text)  # Prefer 'data-order' if available
+                    data[column_name] = cell_data
+
+            yield data
+
+        # Handle additional tables if needed (e.g., AwlTopPerformersPopupTableDownload)
+        other_table = response.xpath("//table[@id='AwlTopPerformersPopupTableDownload']")
+        if other_table:
+            yield from self.parse_table(other_table)
+
+    def parse_table(self, table):
+        # Extract headers
+        headers = table.xpath(".//thead/tr/th/text()").getall()
+        headers = [header.strip() for header in headers if header.strip()]
+
+        # Extract rows
+        rows = table.xpath(".//tbody/tr")
+
+        for row in rows:
+            cells = row.xpath("./td")
+            data = {}
+            for index, cell in enumerate(cells):
+                if index < len(headers):
+                    column_name = headers[index]
+                    cell_text = cell.xpath(".//text()").get(default="").strip()
+                    cell_data = cell.attrib.get("data-order", cell_text)
+                    data[column_name] = cell_data
+
+            yield data
