@@ -10,9 +10,9 @@ class MostActiveStocksHTMLSpider(scrapy.Spider):
     ]
 
     # Elasticsearch connection details
-    ELASTICSEARCH_HOST = ""
+    ELASTICSEARCH_HOST = "http://45.77.225.119:9200"
     ELASTICSEARCH_USER = "root"
-    ELASTICSEARCH_PASSWORD = ""
+    ELASTICSEARCH_PASSWORD = "w6N_]c?rrhio[x3D"
     INDEX_NAME = "psi20lisbon"
 
     def __init__(self, *args, **kwargs):
